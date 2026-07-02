@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0b0b0c;
+  --color-ink-raised: #17171b;
+  --color-ink-border: #2a2a2f;
+  --color-paper: #f5f5f0;
+  --color-paper-dim: #9a9a93;
+  --color-gold: #f5c518;
+  --color-gold-dim: #b8940f;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+}
