@@ -1,7 +1,7 @@
 const features = [
   {
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="#f4c313" strokeWidth="1.75">
+      <svg viewBox="0 0 24 24" fill="none" style={{stroke: '#F5C518'}} className="h-5 w-5" strokeWidth="1.75">
         <circle cx="12" cy="12" r="9" />
         <path d="M12 7v5l3.5 2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -11,7 +11,7 @@ const features = [
   },
   {
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 stroke-gold" strokeWidth="1.75">
+      <svg viewBox="0 0 24 24" fill="none" style={{stroke: '#F5C518'}} className="h-5 w-5" strokeWidth="1.75">
         <path
           d="M4 5h16v10H8l-4 4V5z"
           strokeLinecap="round"
@@ -24,7 +24,7 @@ const features = [
   },
   {
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 stroke-gold" strokeWidth="1.75">
+      <svg viewBox="0 0 24 24" fill="none" style={{stroke: '#F5C518'}} className="h-5 w-5" strokeWidth="1.75">
         <path
           d="M12 3l7 4v5c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V7l7-4z"
           strokeLinecap="round"
@@ -54,7 +54,8 @@ export default function Features() {
               key={f.title}
               className="rounded-2xl border border-ink-border bg-ink p-6 transition hover:border-gold/40"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/30 bg-gold/10">
+              {/* Fixed: bg-gold/30 instead of bg-gold/10 so circle is visible */}
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/60 bg-gold/20">
                 {f.icon}
               </div>
               <h3 className="mt-4 font-display text-lg font-bold text-paper">
