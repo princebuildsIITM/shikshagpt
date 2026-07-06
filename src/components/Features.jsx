@@ -1,7 +1,7 @@
 const features = [
   {
     icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5 stroke-gold" strokeWidth="1.75">
+      <svg viewBox="0 0 24 24" fill="none" className="#f4c313" strokeWidth="1.75">
         <circle cx="12" cy="12" r="9" />
         <path d="M12 7v5l3.5 2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
