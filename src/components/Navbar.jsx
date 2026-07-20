@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-ink-border/80 bg-ink/90 backdrop-blur">
@@ -18,12 +20,12 @@ export default function Navbar() {
           </a>
         </nav>
 
-        <a
-          href="#try"
+        <Link
+          to="/chat"
           className="rounded-full bg-gold px-4 py-2 text-sm font-semibold text-ink transition hover:bg-gold-dim"
         >
           Try it free
-        </a>
+        </Link>
       </div>
     </header>
   )
