@@ -40,25 +40,24 @@ const features = [
 export default function Features() {
   return (
     <section id="features" className="border-t border-ink-border bg-ink-raised/40">
-      <div className="mx-auto max-w-6xl px-6 py-20">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
         <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-gold">
           Why students switch to it
         </p>
-        <h2 className="mt-3 max-w-lg font-display text-2xl font-bold text-paper md:text-3xl">
+        <h2 className="mt-3 max-w-lg font-display text-xl font-bold text-paper sm:text-2xl md:text-3xl">
           Built around one problem: doubts don't happen on a schedule.
         </h2>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 grid gap-5 sm:mt-12 sm:gap-6 md:grid-cols-3">
           {features.map((f) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-ink-border bg-ink p-6 transition hover:border-gold/40"
+              className="rounded-2xl border border-ink-border bg-ink p-5 transition hover:border-gold/40 sm:p-6"
             >
-              {/* Fixed: bg-gold/30 instead of bg-gold/10 so circle is visible */}
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/60 bg-gold/20">
                 {f.icon}
               </div>
-              <h3 className="mt-4 font-display text-lg font-bold text-paper">
+              <h3 className="mt-4 font-display text-base font-bold text-paper sm:text-lg">
                 {f.title}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-paper-dim">

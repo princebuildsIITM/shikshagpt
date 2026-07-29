@@ -4,7 +4,7 @@ export default function ChatBubble({ sender, text }) {
   return (
     <div className={`flex w-full mb-3 ${isUser ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm leading-relaxed
+        className={`max-w-[85%] px-3 py-2 rounded-2xl text-sm leading-relaxed sm:max-w-[75%] sm:px-4
           ${
             isUser
               ? "bg-[#F5C518] text-black rounded-br-sm"
