@@ -2,41 +2,45 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
-
-const PLACEHOLDER_REPLIES = [
-  "Achha sawaal hai! Yeh feature abhi build ho raha hai — real AI reply backend wire hone ke baad live hoga.",
-  "Samajh gaya tumhara doubt. Abhi main sirf demo mode mein hoon — asli jawab jaldi aayega!",
-  "Is topic pe detailed help jald milegi — AI engine abhi backend mein connect ho raha hai.",
-  "Good question! Filhaal main practice mode mein hoon, real answers jald available honge.",
-];
+import { askDoubt } from "../api/doubt.api";
 
 export default function ChatPage() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "ai", text: "Hi! Main ShikshaGPT hoon. Kis topic mein doubt hai?" },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const bottomRef = useRef(null);
 
-  const handleSend = (text) => {
+  const handleSend = async (text) => {
     const userMessage = { id: Date.now(), sender: "user", text };
     setMessages((prev) => [...prev, userMessage]);
+    setIsLoading(true);
 
-    setTimeout(() => {
-      const randomReply =
-        PLACEHOLDER_REPLIES[Math.floor(Math.random() * PLACEHOLDER_REPLIES.length)];
+    const result = await askDoubt(text);
 
+    setIsLoading(false);
+
+    if (result.success) {
       const aiMessage = {
         id: Date.now() + 1,
         sender: "ai",
-        text: randomReply,
+        text: result.answer,
       };
       setMessages((prev) => [...prev, aiMessage]);
-    }, 600);
+    } else {
+      const errorMessage = {
+        id: Date.now() + 1,
+        sender: "ai",
+        text: `⚠️ ${result.error}`,
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
   return (
     <div className="flex flex-col h-screen bg-black">
@@ -54,10 +58,24 @@ export default function ChatPage() {
         {messages.map((msg) => (
           <ChatBubble key={msg.id} sender={msg.sender} text={msg.text} />
         ))}
+
+        {isLoading && (
+          <div className="flex w-full justify-start mb-3">
+            <div className="max-w-[85%] px-3 py-2 rounded-2xl rounded-bl-sm text-sm bg-zinc-800 border border-zinc-700 text-zinc-400 sm:px-4">
+              <span className="inline-flex gap-1">
+                <span className="animate-bounce">.</span>
+                <span className="animate-bounce [animation-delay:0.15s]">.</span>
+                <span className="animate-bounce [animation-delay:0.3s]">.</span>
+              </span>{" "}
+              ShikshaGPT soch raha hai
+            </div>
+          </div>
+        )}
+
         <div ref={bottomRef} />
       </div>
 
-      <ChatInput onSend={handleSend} />
+      <ChatInput onSend={handleSend} disabled={isLoading} />
     </div>
   );
 }
