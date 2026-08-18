@@ -4,11 +4,18 @@ import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
 import { askDoubt } from "../api/doubt.api";
 
+const MODES = [
+  { id: "chat", label: "Chat" },
+  { id: "teacher", label: "Teacher" },
+  { id: "notes", label: "Notes" },
+];
+
 export default function ChatPage() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "ai", text: "Hi! Main ShikshaGPT hoon. Kis topic mein doubt hai?" },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+  const [mode, setMode] = useState("chat");
 
   const bottomRef = useRef(null);
 
@@ -17,16 +24,12 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    const result = await askDoubt(text);
+    const result = await askDoubt(text, mode);
 
     setIsLoading(false);
 
     if (result.success) {
-      const aiMessage = {
-        id: Date.now() + 1,
-        sender: "ai",
-        text: result.answer,
-      };
+      const aiMessage = { id: Date.now() + 1, sender: "ai", text: result.answer };
       setMessages((prev) => [...prev, aiMessage]);
     } else {
       const errorMessage = {
@@ -52,6 +55,23 @@ export default function ChatPage() {
           ← Home
         </Link>
         <h1 className="text-base font-bold text-[#F5C518] sm:text-lg">ShikshaGPT Chat</h1>
+      </div>
+
+      {/* Mode toggle */}
+      <div className="flex gap-2 border-b border-zinc-800 px-3 py-2 sm:px-4">
+        {MODES.map((m) => (
+          <button
+            key={m.id}
+            onClick={() => setMode(m.id)}
+            className={`rounded-full px-3 py-1.5 text-xs font-semibold transition sm:text-sm ${
+              mode === m.id
+                ? "bg-[#F5C518] text-black"
+                : "border border-zinc-700 text-zinc-400 hover:text-white"
+            }`}
+          >
+            {m.label}
+          </button>
+        ))}
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4">
