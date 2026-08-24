@@ -9,6 +9,7 @@ export default function Navbar() {
     { to: '/chat', label: 'Chat' },
     { to: '/test', label: 'Test' },
     { to: '/notes', label: 'Notes' },
+    { to: '/profile', label: 'Profile' },
   ]
 
   return (

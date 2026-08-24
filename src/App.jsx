@@ -7,6 +7,8 @@ import DoubtPage from './components/DoubtPage.jsx'
 import TestPage from './components/TestPage.jsx'
 import NotesPage from './components/NotesPage.jsx'
 import NotFound from './components/NotFound.jsx'
+import ProfilePage from './components/ProfilePage.jsx'
+
 
 function HomePage() {
   return (
@@ -29,6 +31,7 @@ export default function App() {
           <Route path="/test" element={<TestPage />} />
           <Route path="/notes" element={<NotesPage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
     </BrowserRouter>
