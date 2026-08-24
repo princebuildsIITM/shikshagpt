@@ -2,11 +2,12 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-export async function askDoubt(question, mode = "chat") {
+export async function askDoubt(question, mode = "chat", history = []) {
   try {
     const response = await axios.post(`${API_BASE_URL}/api/doubt`, {
       question,
       mode,
+      history,
     });
 
     return {

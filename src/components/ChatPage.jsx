@@ -10,11 +10,17 @@ const MODES = [
   { id: "notes", label: "Notes" },
 ];
 
+function getLoadingText(question) {
+  const hasHindi = /[\u0900-\u097F]/.test(question);
+  return hasHindi ? "ShikshaGPT soch raha hai" : "ShikshaGPT is thinking";
+}
+
 export default function ChatPage() {
   const [messages, setMessages] = useState([
     { id: 1, sender: "ai", text: "Hi! Main ShikshaGPT hoon. Kis topic mein doubt hai?" },
   ]);
   const [isLoading, setIsLoading] = useState(false);
+    const [loadingText, setLoadingText] = useState("ShikshaGPT is thinking");
   const [mode, setMode] = useState("chat");
 
   const bottomRef = useRef(null);
@@ -22,9 +28,11 @@ export default function ChatPage() {
   const handleSend = async (text) => {
     const userMessage = { id: Date.now(), sender: "user", text };
     setMessages((prev) => [...prev, userMessage]);
+    setLoadingText(getLoadingText(text));
     setIsLoading(true);
 
-    const result = await askDoubt(text, mode);
+      const recentHistory = messages.slice(1).slice(-4); // skip greeting, last 2 exchanges
+      const result = await askDoubt(text, mode, recentHistory);
 
     setIsLoading(false);
 
@@ -87,7 +95,7 @@ export default function ChatPage() {
                 <span className="animate-bounce [animation-delay:0.15s]">.</span>
                 <span className="animate-bounce [animation-delay:0.3s]">.</span>
               </span>{" "}
-              ShikshaGPT soch raha hai
+              {loadingText}
             </div>
           </div>
         )}
