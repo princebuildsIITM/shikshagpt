@@ -19,6 +19,10 @@ app.get("/", (req, res) => {
   res.json({ message: "ShikshaGPT API is running ✅" });
 });
 
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "ShikshaGPT API is healthy", timestamp: new Date().toISOString() });
+});
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // --- Multer setup for image uploads ---
