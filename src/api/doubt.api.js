@@ -25,3 +25,15 @@ export async function askDoubt(question, mode = "chat", history = []) {
     };
   }
 }
+
+
+export async function getDoubtHistory() {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/doubt/history`);
+    return { success: true, history: response.data.history };
+  } catch (error) {
+    console.error("getDoubtHistory error:", error);
+    return { success: false, error: "History load nahi ho payi." };
+  }
+}
+

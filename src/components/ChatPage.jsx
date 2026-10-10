@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ChatBubble from "./ChatBubble";
 import ChatInput from "./ChatInput";
-import { askDoubt } from "../api/doubt.api";
+import { askDoubt, getDoubtHistory } from "../api/doubt.api";
 
 const MODES = [
   { id: "chat", label: "Chat" },
@@ -20,8 +20,13 @@ export default function ChatPage() {
     { id: 1, sender: "ai", text: "Hi! Main ShikshaGPT hoon. Kis topic mein doubt hai?" },
   ]);
   const [isLoading, setIsLoading] = useState(false);
-    const [loadingText, setLoadingText] = useState("ShikshaGPT is thinking");
+  const [loadingText, setLoadingText] = useState("ShikshaGPT is thinking");
   const [mode, setMode] = useState("chat");
+
+  // Saved doubts (from MongoDB)
+  const [showSaved, setShowSaved] = useState(false);
+  const [savedDoubts, setSavedDoubts] = useState([]);
+  const [savedError, setSavedError] = useState("");
 
   const bottomRef = useRef(null);
 
@@ -31,8 +36,8 @@ export default function ChatPage() {
     setLoadingText(getLoadingText(text));
     setIsLoading(true);
 
-      const recentHistory = messages.slice(1).slice(-4); // skip greeting, last 2 exchanges
-      const result = await askDoubt(text, mode, recentHistory);
+    const recentHistory = messages.slice(1).slice(-4); // skip greeting, last 2 exchanges
+    const result = await askDoubt(text, mode, recentHistory);
 
     setIsLoading(false);
 
@@ -47,6 +52,19 @@ export default function ChatPage() {
       };
       setMessages((prev) => [...prev, errorMessage]);
     }
+  };
+
+  const handleToggleSaved = async () => {
+    if (!showSaved) {
+      const result = await getDoubtHistory();
+      if (result.success) {
+        setSavedDoubts(result.history);
+        setSavedError("");
+      } else {
+        setSavedError(result.error);
+      }
+    }
+    setShowSaved((prev) => !prev);
   };
 
   useEffect(() => {
@@ -65,8 +83,8 @@ export default function ChatPage() {
         <h1 className="text-base font-bold text-[#F5C518] sm:text-lg">ShikshaGPT Chat</h1>
       </div>
 
-      {/* Mode toggle */}
-      <div className="flex gap-2 border-b border-zinc-800 px-3 py-2 sm:px-4">
+      {/* Mode toggle + History button */}
+      <div className="flex items-center gap-2 border-b border-zinc-800 px-3 py-2 sm:px-4">
         {MODES.map((m) => (
           <button
             key={m.id}
@@ -80,7 +98,39 @@ export default function ChatPage() {
             {m.label}
           </button>
         ))}
+
+        <button
+          onClick={handleToggleSaved}
+          className={`ml-auto rounded-full px-3 py-1.5 text-xs font-semibold transition sm:text-sm ${
+            showSaved
+              ? "bg-zinc-700 text-white"
+              : "border border-zinc-700 text-zinc-400 hover:text-white"
+          }`}
+        >
+          📜 History
+        </button>
       </div>
+
+      {/* Saved doubts panel */}
+      {showSaved && (
+        <div className="max-h-56 overflow-y-auto border-b border-zinc-800 bg-zinc-950 px-3 py-2 sm:px-4">
+          {savedError ? (
+            <p className="text-xs text-red-400">{savedError}</p>
+          ) : savedDoubts.length === 0 ? (
+            <p className="text-xs text-zinc-500">Abhi tak koi doubt save nahi hua.</p>
+          ) : (
+            savedDoubts.map((item) => (
+              <div key={item._id} className="mb-2 border-b border-zinc-800 pb-2 last:border-none">
+                <p className="text-xs font-semibold text-[#F5C518]">{item.question}</p>
+                <p className="line-clamp-2 text-xs text-zinc-400">{item.answer}</p>
+                <p className="mt-0.5 text-[10px] text-zinc-600">
+                  {item.mode} · {new Date(item.createdAt).toLocaleString()}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4">
         {messages.map((msg) => (
